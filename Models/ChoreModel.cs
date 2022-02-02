@@ -14,19 +14,23 @@ namespace LunarChores.Models
         #endregion
 
         #region Properties
-        public bool? isDoneToday { get; set; } = null;
+        private bool? _isDoneToday = null;
+
+        public bool? IsDoneToday
+        {
+            get 
+            {
+                if (_isDoneToday != null) return _isDoneToday; 
+                else return _isDoneToday = DataAcces.CheckIsChoreDoneToday(this.Id);
+            }
+            set { _isDoneToday = value; }
+        }
         #endregion
 
         #region Methods
         public void Uncheck()
         {
             throw new NotImplementedException();
-        }
-
-        public bool CheckIsDoneToday()
-        {
-            if (isDoneToday != null) return (bool)isDoneToday;
-            else return (bool)(isDoneToday = DataAcces.CheckIsChoreDoneToday(this.Id));
         }
         #endregion
     }

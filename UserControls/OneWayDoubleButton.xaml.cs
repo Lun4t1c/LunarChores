@@ -23,6 +23,13 @@ namespace LunarChores.UserControls
         public OneWayDoubleButton()
         {
             InitializeComponent();
+            
         }
+
+        private void FirstStepButton_Click(object sender, RoutedEventArgs e)
+        {
+            FirstStepButton.Background = Brushes.Red;
+        }
+
     }
 }

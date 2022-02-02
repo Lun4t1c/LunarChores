@@ -28,11 +28,24 @@ namespace LunarChores.ViewModels
         #endregion
 
         #region Methods
-
+        private void Uncheck()
+        {
+            System.Windows.MessageBoxResult dialogResult = System.Windows.MessageBox.Show($"Are you sure?", "", System.Windows.MessageBoxButton.YesNo);
+            if (dialogResult == System.Windows.MessageBoxResult.Yes)
+            {
+                AssignedChore.Uncheck();
+            }
+            else if (dialogResult == System.Windows.MessageBoxResult.No)
+                return;
+        }
         #endregion
 
         #region Button clicks
-
+        public void UncheckButton()
+        {
+            Console.WriteLine("CLICK");
+            Uncheck();
+        }
         #endregion
     }
 }

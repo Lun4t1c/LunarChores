@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LunarChores.Views"
+             xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -12,8 +13,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Column="0"
-                   Fill="Yellow"/>
+        <Button Grid.Column="0"
+                x:Name="UncheckButton"
+                Content="benc"
+                cal:Message.Attach="UncheckButton"/>
 
         <Label Grid.Column="1"
                Content="{Binding AssignedChore.Name}"

@@ -32,7 +32,12 @@ namespace LunarChores.ViewModels
         #region Methods
         private void EditAssignedNote()
         {
+            Console.WriteLine("EDIT");
+        }
 
+        private void DeleteAssignedNote()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -44,19 +49,9 @@ namespace LunarChores.ViewModels
         #endregion
 
         #region Input
-        public void ExecuteFilterView(ActionExecutionContext context)
+        public void ucDoubleClick()
         {
-            Console.WriteLine($"DClick");
-
-            var keyArgs = context.EventArgs as KeyEventArgs;
-            if (keyArgs != null)
-            {
-                
-                if (keyArgs.Key == Key.Enter)
-                {
-                    
-                }
-            }
+            DeleteAssignedNote();
         }
         #endregion
     }

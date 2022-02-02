@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Height="50"
-             cal:Message.Attach="[Event MouseDoubleClick] = [Action ExecuteFilterView($executionContext)]">
+             cal:Message.Attach="[Event MouseDoubleClick] = [Action ucDoubleClick()]">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
@@ -17,12 +17,13 @@
 
         <Button Grid.Column="0"
                 x:Name="EditButton"
-                Content="Edit"/>
+                Content="Edit"
+                cal:Message.Attach="EditButton"/>
 
         <Label Grid.Column="1"
-               x:Name="test"
                Content="{Binding AssignedNote.Description}"
                Foreground="White"
                FontSize="28"/>
+        
     </Grid>
 </UserControl>
