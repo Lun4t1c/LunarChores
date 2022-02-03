@@ -42,6 +42,16 @@ namespace LunarChores
                 );
             }
         }
+        
+        public static void InsertChore(ChoreModel choreModel)
+        {
+            spInsertChore(choreModel);
+        }
+
+        public static void InsertStreak(StreakModel streakModel)
+        {
+            spInsertStreak(streakModel);
+        }
         #endregion
 
         #region Get data
@@ -195,11 +205,50 @@ namespace LunarChores
             }
         }
 
+        public static void spInsertChore(ChoreModel choreModel)
+        {
+            using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
+            {
+                using (SqlCommand cmd = new SqlCommand("spInsertChore", conn) { CommandType = CommandType.StoredProcedure })
+                {
+                    cmd.Parameters.Add("@chore_name", SqlDbType.NVarChar).Value = choreModel.Name;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void spInsertStreak(StreakModel streakModel)
+        {
+            Console.WriteLine($"NAME - {streakModel.Name}");
+            using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
+            {
+                using (SqlCommand cmd = new SqlCommand("spInsertStreak", conn) { CommandType = CommandType.StoredProcedure })
+                {
+                    cmd.Parameters.Add("@streak_name", SqlDbType.NVarChar).Value = streakModel.Name;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public static void spDeleteAllProgress()
         {
             using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
             {
                 using (SqlCommand cmd = new SqlCommand("spDeleteAllProgress", conn) { CommandType = CommandType.StoredProcedure })
+                {                    
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void spDeleteAllData()
+        {
+            using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
+            {
+                using (SqlCommand cmd = new SqlCommand("spDeleteAllData", conn) { CommandType = CommandType.StoredProcedure })
                 {
                     conn.Open();
                     cmd.ExecuteNonQuery();
