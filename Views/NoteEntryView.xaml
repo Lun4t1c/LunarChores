@@ -31,7 +31,7 @@
         <ContextMenu Name="cm" StaysOpen="true">
             <MenuItem Header="Highlight" cal:Message.Attach="HighlightButton"/>
             <MenuItem Header="Edit"/>
-            <MenuItem Header="Delete"/>
+            <MenuItem Header="Delete" cal:Message.Attach="DeleteButton"/>
         </ContextMenu>
     </UserControl.ContextMenu>
 </UserControl>

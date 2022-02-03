@@ -19,7 +19,6 @@ namespace LunarChores.ViewModels
             get { return _assignedNote; }
             set { _assignedNote = value; NotifyOfPropertyChange(() => AssignedNote); }
         }
-
         #endregion
 
         #region Constructor
@@ -37,7 +36,7 @@ namespace LunarChores.ViewModels
 
         private void DeleteAssignedNote()
         {
-            throw new NotImplementedException();
+            AssignedNote.Delete();
         }
         #endregion
 
@@ -50,6 +49,11 @@ namespace LunarChores.ViewModels
         public void HighlightButton()
         {
             Console.WriteLine("HIGHLIGHT");
+        }
+
+        public void DeleteButton()
+        {
+            DeleteAssignedNote();
         }
         #endregion
 

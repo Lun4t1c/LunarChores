@@ -54,6 +54,22 @@ namespace LunarChores
         }
         #endregion
 
+        #region Delete data
+        public static void DeleteNote(NoteModel noteModel)
+        {
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                connection.Execute(
+                    "DELETE FROM NOTES WHERE Id = @idnote",
+                    new { idnote = noteModel.Id }
+                );
+            }
+        }
+        #endregion
+
         #region Get data
         public static DayModel GetLastDay()
         {

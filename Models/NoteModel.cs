@@ -28,7 +28,7 @@ namespace LunarChores.Models
 
         public void Delete()
         {
-            throw new NotImplementedException();
+            DataAcces.DeleteNote(this);
         }
         #endregion
     }
