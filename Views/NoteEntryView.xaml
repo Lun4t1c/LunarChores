@@ -26,4 +26,12 @@
                FontSize="28"/>
         
     </Grid>
+
+    <UserControl.ContextMenu>
+        <ContextMenu Name="cm" StaysOpen="true">
+            <MenuItem Header="Highlight" cal:Message.Attach="HighlightButton"/>
+            <MenuItem Header="Edit"/>
+            <MenuItem Header="Delete"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

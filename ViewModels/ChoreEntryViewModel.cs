@@ -24,6 +24,7 @@ namespace LunarChores.ViewModels
         public ChoreEntryViewModel(ChoreModel choreModel)
         {
             AssignedChore = choreModel;
+            Console.WriteLine($"{AssignedChore.Name} - {AssignedChore.IsDoneToday}");
         }
         #endregion
 

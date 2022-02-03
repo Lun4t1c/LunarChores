@@ -35,6 +35,8 @@ namespace LunarChores.ViewModels
             CurrentDay = DataAcces.GetLastDay();
             Console.WriteLine(CurrentDay.day_date.ToLongDateString());
 
+
+            DataAcces.spDeleteAllProgress();
             //DataAcces.spCreateNewDay();
         }
         #endregion

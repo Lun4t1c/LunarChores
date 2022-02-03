@@ -46,6 +46,11 @@ namespace LunarChores.ViewModels
         {
             EditAssignedNote();
         }
+
+        public void HighlightButton()
+        {
+            Console.WriteLine("HIGHLIGHT");
+        }
         #endregion
 
         #region Input

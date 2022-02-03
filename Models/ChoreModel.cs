@@ -21,16 +21,15 @@ namespace LunarChores.Models
             get 
             {
                 if (_isDoneToday != null) return _isDoneToday; 
-                else return _isDoneToday = DataAcces.CheckIsChoreDoneToday(this.Id);
+                else return _isDoneToday = DataAcces.CheckIsChoreDoneToday(this);
             }
-            set { _isDoneToday = value; }
         }
         #endregion
 
         #region Methods
         public void Uncheck()
         {
-            throw new NotImplementedException();
+            DataAcces.UncheckChore(this);
         }
         #endregion
     }

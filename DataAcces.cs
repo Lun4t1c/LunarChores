@@ -47,13 +47,19 @@ namespace LunarChores
         #region Get data
         public static DayModel GetLastDay()
         {
+            try
+            {
+                spCreateNewDay();
+            }
+            catch { }
+
             DayModel OutV = null;
             using (IDbConnection connection = GetDapperConnection())
             {
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                OutV = connection.QueryFirstOrDefault<DayModel>($"select * from DAYS ORDER BY Id DESC");
+                OutV = connection.QueryFirstOrDefault<DayModel>($"select * from DAYS ORDER BY day_date DESC");
             }
 
             return OutV;
@@ -88,7 +94,7 @@ namespace LunarChores
                 if (connection.State == ConnectionState.Closed)
                     connection.Open();
 
-                dapperList = connection.Query<ChoreModel>($"SELECT * FROM CHORES").OrderBy(note => note.Id).ToList();
+                dapperList = connection.Query<ChoreModel>($"SELECT * FROM CHORES").OrderBy(chore => chore.Id).ToList();
             }
 
             foreach (ChoreModel choreModel in dapperList)
@@ -97,9 +103,82 @@ namespace LunarChores
             return OutV;
         }
 
-        public static bool CheckIsChoreDoneToday(int IdChore)
+        public static BindableCollection<StreakModel> GetAllStreaks()
         {
-            throw new NotImplementedException();
+            BindableCollection<StreakModel> OutV = new BindableCollection<StreakModel>();
+            List<StreakModel> dapperList = new List<StreakModel>();
+
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                dapperList = connection.Query<StreakModel>($"SELECT * FROM STREAKS").OrderBy(streak => streak.Id).ToList();
+            }
+
+            foreach (StreakModel streakModel in dapperList)
+                OutV.Add(streakModel);
+
+            return OutV;
+        }
+
+        public static bool CheckIsChoreDoneToday(ChoreModel choreModel)
+        {
+            bool OutV;
+
+            DayModel currentDay = GetLastDay();
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                OutV = connection.QueryFirstOrDefault<bool>(
+                    $"SELECT Is_done " +
+                    $"FROM DAY_CHORE " +
+                    $"WHERE Id_chore = @idchore AND Id_day = @idday",
+                    new { idchore = choreModel.Id, idday = currentDay.Id }
+                );
+            }
+
+            return OutV;
+        }
+        #endregion
+
+        #region Update data
+        public static void UncheckChore(ChoreModel choreModel)
+        {
+            DayModel currentDay = GetLastDay();
+
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                connection.Execute(
+                    "UPDATE DAY_CHORE " +
+                    "SET Is_done = 1 " +
+                    "WHERE Id_day = @idday AND Id_chore = @idchore",
+                    new { idday = currentDay.Id, idchore = choreModel.Id }
+                );
+            }
+        }
+        
+        public static void ResetStreak(StreakModel streakModel)
+        {
+            DayModel currentDay = GetLastDay();
+
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                connection.Execute(
+                    "UPDATE DAY_STREAK " +
+                    "SET Is_canceled = 1 " +
+                    "WHERE Id_day = @idday AND Id_streak = @idstreak",
+                    new { idday = currentDay.Id, idstreak = streakModel.Id }
+                );
+            }
         }
         #endregion
 
@@ -109,6 +188,18 @@ namespace LunarChores
             using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
             {
                 using (SqlCommand cmd = new SqlCommand("spCreateNewDay", conn) { CommandType = CommandType.StoredProcedure })
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void spDeleteAllProgress()
+        {
+            using (var conn = new SqlConnection(Properties.Settings.Default.cnstring))
+            {
+                using (SqlCommand cmd = new SqlCommand("spDeleteAllProgress", conn) { CommandType = CommandType.StoredProcedure })
                 {
                     conn.Open();
                     cmd.ExecuteNonQuery();

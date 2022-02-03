@@ -14,9 +14,9 @@ namespace LunarChores.Models
         #endregion
 
         #region Methods
-        public void reset()
+        public void Reset()
         {
-            throw new NotImplementedException();
+            DataAcces.ResetStreak(this);
         }
         #endregion
     }
