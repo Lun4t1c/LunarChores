@@ -18,7 +18,7 @@ namespace LunarChores.Models
         #region Methods
         public void SwitchIsImportant()
         {
-            throw new NotImplementedException();
+            DataAcces.HighlightNote(this);
         }
 
         public void UpdateDescription()

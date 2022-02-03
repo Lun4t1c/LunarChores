@@ -41,15 +41,24 @@ namespace LunarChores.ViewModels
         {
             Notes = DataAcces.GetAllNotes();
 
-            foreach (NoteModel noteModel in Notes)
-            {
-                Console.WriteLine($"Adding note {noteModel.Id}");
-                NotesViewModels.Add(new NoteEntryViewModel(noteModel));
-            }
+            ReloadViewModels();
         }
         #endregion
 
         #region Methods
+        private void ReloadViewModels()
+        {
+            NotesViewModels.Clear();
+            foreach (NoteModel noteModel in Notes)
+            {
+                NoteEntryViewModel noteEntryViewModel = new NoteEntryViewModel(noteModel);
+
+                if (noteModel.Is_important) noteEntryViewModel.BackgroundBrush = System.Windows.Media.Brushes.Red;
+
+                NotesViewModels.Add(noteEntryViewModel);
+            }
+        }
+
         public void ReloadNotes()
         {
             Console.WriteLine("Reloadibng");

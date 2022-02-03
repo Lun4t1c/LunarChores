@@ -19,7 +19,7 @@ namespace LunarChores.ViewModels
         public DayModel CurrentDay
         {
             get { return _currentDay; }
-            set { _currentDay = value; NotifyOfPropertyChange(() => CurrentDay); }
+            set { _currentDay = value; NotifyOfPropertyChange(() => CurrentDay); NotifyOfPropertyChange(() => CurrentDayString); }
         }        
 
         public Screen CurrentViewModel
@@ -32,12 +32,16 @@ namespace LunarChores.ViewModels
         #region Constructor
         public ShellViewModel()
         {
-            CurrentDay = DataAcces.GetLastDay();
-            Console.WriteLine(CurrentDay.day_date.ToLongDateString());
+            LoadLastDay();
         }
         #endregion
 
         #region Methods
+        private async void LoadLastDay()
+        {
+            CurrentDay = await Task.Run(() => DataAcces.GetLastDay());
+            Console.WriteLine(CurrentDay.day_date.ToLongDateString());
+        }
         private void AddNote()
         {
             ShowNotes();
@@ -58,31 +62,37 @@ namespace LunarChores.ViewModels
             manager.ShowWindowAsync(new ViewModels.StreakAdderViewModel());
         }
 
-        private void ShowNotes()
+        private async void ShowNotes()
         {
             if (CurrentViewModel?.GetType() == typeof(NotesControlViewModel))
                 return;
 
-            CurrentViewModel = new NotesControlViewModel();
-            ActivateItemAsync(CurrentViewModel);
+            await ActivateItemAsync(new LoadingViewModel());
+
+            CurrentViewModel = await Task.Run(() => new NotesControlViewModel());
+            await ActivateItemAsync(CurrentViewModel);
         }
 
-        private void ShowChores()
+        private async void ShowChores()
         {
             if (CurrentViewModel?.GetType() == typeof(ChoresControlViewModel))
                 return;
 
-            CurrentViewModel = new ChoresControlViewModel();
-            ActivateItemAsync(CurrentViewModel);
+            await ActivateItemAsync(new LoadingViewModel());
+
+            CurrentViewModel = await Task.Run(() => new ChoresControlViewModel());
+            await ActivateItemAsync(CurrentViewModel);
         }
 
-        private void ShowStreaks()
+        private async void ShowStreaks()
         {
             if (CurrentViewModel?.GetType() == typeof(StreaksControlViewModel))
                 return;
 
-            CurrentViewModel = new StreaksControlViewModel();
-            ActivateItemAsync(CurrentViewModel);
+            await ActivateItemAsync(new LoadingViewModel());
+
+            CurrentViewModel = await Task.Run(() => new StreaksControlViewModel());
+            await ActivateItemAsync(CurrentViewModel);
         }
         #endregion
 

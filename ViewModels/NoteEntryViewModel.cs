@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace LunarChores.ViewModels
 {
@@ -13,11 +14,18 @@ namespace LunarChores.ViewModels
     {
         #region Properties
         private NoteModel _assignedNote;
+        private Brush _backgroundBrush;
 
         public NoteModel AssignedNote
         {
             get { return _assignedNote; }
             set { _assignedNote = value; NotifyOfPropertyChange(() => AssignedNote); }
+        }        
+
+        public Brush BackgroundBrush
+        {
+            get { return _backgroundBrush; }
+            set { _backgroundBrush = value; NotifyOfPropertyChange(() => BackgroundBrush); }
         }
         #endregion
 
@@ -31,12 +39,17 @@ namespace LunarChores.ViewModels
         #region Methods
         private void EditAssignedNote()
         {
-            Console.WriteLine("EDIT");
+            throw new NotImplementedException();
         }
 
         private void DeleteAssignedNote()
         {
             AssignedNote.Delete();
+        }
+
+        private void HighlightAssignedNote()
+        {
+            AssignedNote.SwitchIsImportant();
         }
         #endregion
 
@@ -48,7 +61,7 @@ namespace LunarChores.ViewModels
 
         public void HighlightButton()
         {
-            Console.WriteLine("HIGHLIGHT");
+            HighlightAssignedNote();
         }
 
         public void DeleteButton()

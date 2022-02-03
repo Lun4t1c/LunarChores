@@ -206,6 +206,36 @@ namespace LunarChores
                 );
             }
         }
+        
+        public static void HighlightNote(NoteModel noteModel)
+        {
+            bool? isHighlighted = null;
+
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                isHighlighted = connection.QueryFirstOrDefault<bool?>(
+                    $"SELECT Is_important " +
+                    $"FROM NOTES " +
+                    $"WHERE Id = @idnote",
+                    new { idnote = noteModel.Id }
+                );
+
+                if (isHighlighted != null)
+                {
+                    connection.Execute(
+                        "UPDATE NOTES " +
+                        "SET Is_important = @newval " +
+                        "WHERE Id = @idnote",
+                        new { idnote = noteModel.Id, newval = !isHighlighted }
+                );
+                }
+                else
+                    throw new Exception("ERROR when reading database: 'isHighlighted' is null.");
+            }
+        }
         #endregion
 
         #region Stored procedures
