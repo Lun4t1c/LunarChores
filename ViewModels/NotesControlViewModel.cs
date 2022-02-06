@@ -2,7 +2,7 @@
 using LunarChores.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace LunarChores.ViewModels
     {
         #region Properties
         private BindableCollection<NoteModel> _notes;
-        private Color _highlightColor = Color.Red;
+        private Brush _highlightBrush = Brushes.DarkRed;
         private BindableCollection<NoteEntryViewModel> _notesViewModels = new BindableCollection<NoteEntryViewModel>();
 
         public BindableCollection<NoteModel> Notes
@@ -22,25 +22,24 @@ namespace LunarChores.ViewModels
             set { _notes = value; NotifyOfPropertyChange(() => Notes); }
         }        
 
-        public Color HighlightColor
+        public Brush HighlightBrush
         {
-            get { return _highlightColor; }
-            set { _highlightColor = value; NotifyOfPropertyChange(() => HighlightColor); }
+            get { return _highlightBrush; }
+            set { _highlightBrush = value; NotifyOfPropertyChange(() => HighlightBrush); }
         }       
 
         public BindableCollection<NoteEntryViewModel> NotesViewModels
         {
             get { return _notesViewModels; }
             set { _notesViewModels = value; NotifyOfPropertyChange(() => NotesViewModels); }
-        }
-
+        } 
         #endregion
 
         #region Constructor
         public NotesControlViewModel()
         {
             Notes = DataAcces.GetAllNotes();
-
+            
             ReloadViewModels();
         }
         #endregion
@@ -49,11 +48,12 @@ namespace LunarChores.ViewModels
         private void ReloadViewModels()
         {
             NotesViewModels.Clear();
+
             foreach (NoteModel noteModel in Notes)
             {
                 NoteEntryViewModel noteEntryViewModel = new NoteEntryViewModel(noteModel);
 
-                if (noteModel.Is_important) noteEntryViewModel.BackgroundBrush = System.Windows.Media.Brushes.Red;
+                if (noteModel.Is_important) noteEntryViewModel.BackgroundBrush = HighlightBrush;
 
                 NotesViewModels.Add(noteEntryViewModel);
             }
@@ -72,7 +72,7 @@ namespace LunarChores.ViewModels
         public void AddNote(NoteModel noteModel)
         {
             Notes.Add(noteModel);
-            NotesViewModels.Add(new NoteEntryViewModel(noteModel));
+            NotesViewModels.Add(new NoteEntryViewModel(noteModel, this));
         }
         #endregion
     }

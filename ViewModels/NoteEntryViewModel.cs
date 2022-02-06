@@ -13,8 +13,12 @@ namespace LunarChores.ViewModels
     public class NoteEntryViewModel : Screen
     {
         #region Properties
+        private NotesControlViewModel ControlViewModel = null;
+
         private NoteModel _assignedNote;
         private Brush _backgroundBrush;
+        private bool _isEdited = false;
+        private string _editTextBox;
 
         public NoteModel AssignedNote
         {
@@ -26,20 +30,35 @@ namespace LunarChores.ViewModels
         {
             get { return _backgroundBrush; }
             set { _backgroundBrush = value; NotifyOfPropertyChange(() => BackgroundBrush); }
+        }        
+
+        public bool isEdited
+        {
+            get { return _isEdited; }
+            set { _isEdited = value; NotifyOfPropertyChange(() => isEdited); }
         }
+
+        public string EditTextBox
+        {
+            get { return _editTextBox; }
+            set { _editTextBox = value; NotifyOfPropertyChange(() => EditTextBox); }
+        }
+
         #endregion
 
         #region Constructor
-        public NoteEntryViewModel(NoteModel noteModel)
+        public NoteEntryViewModel(NoteModel noteModel, NotesControlViewModel controlViewModel = null)
         {
             AssignedNote = noteModel;
+            ControlViewModel = controlViewModel;
         }
         #endregion
 
         #region Methods
         private void EditAssignedNote()
         {
-            throw new NotImplementedException();
+            isEdited = true;
+            EditTextBox = AssignedNote.Description;
         }
 
         private void DeleteAssignedNote()
@@ -50,6 +69,17 @@ namespace LunarChores.ViewModels
         private void HighlightAssignedNote()
         {
             AssignedNote.SwitchIsImportant();
+        }
+
+        private void ConfirmEdit()
+        {
+            isEdited = false;
+            Console.WriteLine($"New text = {EditTextBox}");
+
+            DataAcces.UpdateNoteText(AssignedNote, EditTextBox);
+            AssignedNote.Description = EditTextBox;
+
+            NotifyOfPropertyChange(() => AssignedNote);
         }
         #endregion
 
@@ -73,7 +103,19 @@ namespace LunarChores.ViewModels
         #region Input
         public void ucDoubleClick()
         {
-            DeleteAssignedNote();
+            HighlightAssignedNote();
+        }
+
+        public void EditTextBoxPreviewKeyDown(ActionExecutionContext context)
+        {
+            var keyArgs = context.EventArgs as KeyEventArgs;
+            if (keyArgs != null)
+            {
+                if (keyArgs.Key == Key.Enter)
+                {
+                    ConfirmEdit();
+                }
+            }
         }
         #endregion
     }

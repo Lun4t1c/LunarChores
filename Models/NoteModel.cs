@@ -21,9 +21,9 @@ namespace LunarChores.Models
             DataAcces.HighlightNote(this);
         }
 
-        public void UpdateDescription()
+        public void UpdateDescription(string newText)
         {
-            throw new NotImplementedException();
+            DataAcces.UpdateNoteText(this, newText);
         }
 
         public void Delete()

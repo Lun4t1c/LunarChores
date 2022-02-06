@@ -15,16 +15,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- EDIT BUTTON -->
         <Button Grid.Column="0"
                 x:Name="EditButton"
                 Content="Edit"
                 cal:Message.Attach="EditButton"/>
 
+        <!-- NOTE TEXT LABEL -->
         <Label Grid.Column="1"
                Content="{Binding AssignedNote.Description}"
                Foreground="White"
                FontSize="28"/>
         
+        <!-- EDIT TEXTBOX -->
+        <TextBox Grid.Column="1"
+                   Panel.ZIndex="10"
+                   Text="{Binding Path=EditTextBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   cal:Message.Attach="[Event PreviewKeyDown] = [Action EditTextBoxPreviewKeyDown($executionContext)]"
+                   Visibility="{Binding isEdited, Converter={StaticResource vcBoolToVisibility}}"/>
+
     </Grid>
 
     <UserControl.ContextMenu>

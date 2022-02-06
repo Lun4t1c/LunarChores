@@ -136,7 +136,7 @@ namespace LunarChores.ViewModels
             {
                 if (keyArgs.Key == Key.Space)
                 {
-                    AddNote();
+                    //AddNote();
                 }
             }
         }

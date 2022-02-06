@@ -236,6 +236,22 @@ namespace LunarChores
                     throw new Exception("ERROR when reading database: 'isHighlighted' is null.");
             }
         }
+        
+        public static void UpdateNoteText(NoteModel noteModel, string newText)
+        {
+            using (IDbConnection connection = GetDapperConnection())
+            {
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
+                connection.Execute(
+                    "UPDATE NOTES " +
+                    "SET Description = @newtext " +
+                    "WHERE Id = @idnote",
+                    new { idnote = noteModel.Id, newtext = newText }
+                );
+            }
+        }
         #endregion
 
         #region Stored procedures
